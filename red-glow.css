@@ -1,0 +1,41 @@
+/*YAD 0.40 */
+window,
+dialog {
+    background-color: #160309;
+    color: #ffe8ec;
+    border: 1px solid #ff1744;
+    box-shadow: 0 0 14px #ff1744, 0 0 28px #a60025;
+}
+
+label {
+    color: #ffe8ec;
+}
+
+button {
+    background-image: none;
+    background-color: #470817;
+    color: #fff1f3;
+    border: 1px solid #ff244d;
+    border-radius: 20px;
+    padding: 7px 14px;
+    box-shadow: 0 0 7px #ff1744;
+}
+
+button:hover {
+    background-image: none;
+    background-color: #a90d2e;
+    color: #ffffff;
+    box-shadow: 0 0 12px #ff1744, 0 0 20px #a60025;
+}
+
+treeview,
+treeview.view {
+    background-color: #21070f;
+    color: #ffe8ec;
+}
+
+treeview:selected,
+treeview.view:selected {
+    background-color: #a40d31;
+    color: #ffffff;
+}
