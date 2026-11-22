@@ -1,123 +1,110 @@
 #!/bin/bash
 
+
 scriptDir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 demoDir="$scriptDir/demo"
 dataDir="$scriptDir/data"
-logsDir="$scriptDir/logs"
-styleFile="$scriptDir/red-glow.css"
-logFile="$logsDir/tamper.log"
+baselineFile="$dataDir/baseline.txt"
+currentFile="$dataDir/current.txt"
+reportFile="$dataDir/changes.txt"
 
-logMessage() {
-    mkdir -p -- "$logsDir"
-    printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$1" >> "$logFile"
+
+if [[ -n "${DISPLAY:-}" ]]; then
+    export GDK_BACKEND=x11
+fi
+
+showMessage() {
+    yad --info --title="Tamper Detector" --center --on-top --text="$1"
 }
 
-showNotice() {
-    yad --info \
-        --title="File Integrity Monitor" \
-        --width=400 \
-        --center \
-        --gtkrc="$styleFile" \
-        --text="$1"
+showError() {
+    yad --error --title="Tamper Detector" --center --on-top --text="$1"
 }
 
-resetDemo() {
-   
-    if [[ -z "$demoDir" || "$demoDir" == "/" ]]; then
-        printf 'Safety stop: demoDir is empty or /\n' >&2
-        return 1
-    fi
-
-    if [[ -d "$demoDir" ]]; then
-        rm -r -- "$demoDir" || return 1
-    fi
-
-    mkdir -p -- "$demoDir/notes" || return 1
-    
-    touch "$demoDir/empty.txt"
+scanDemo() {
+    (
+        cd -- "$demoDir" || exit 1
+        find . -type f -exec sha256sum -- {} \; | LC_ALL=C sort -k 2
+    )
 }
 
 createBaseline() {
-    showNotice "Baseline creation is not implemented yet."
+    local fileCount
+
+    if [[ ! -d "$demoDir" ]]; then
+        showError "The demo/ folder is missing."
+        return
+    fi
+
+    mkdir -p -- "$dataDir" || {
+        showError "Could not create the data/ folder."
+        return
+    }
+
+    if [[ -f "$baselineFile" ]]; then
+        if ! yad --question --title="Replace baseline?" --center \
+            --text="Replace the old baseline with the current demo/ files?" \
+            --button="Cancel:1" --button="Replace:0"; then
+            return
+        fi
+    fi
+
+    if ! scanDemo > "$dataDir/baseline.tmp"; then
+        showError "Could not read the files in demo/."
+        return
+    fi
+
+    mv -f -- "$dataDir/baseline.tmp" "$baselineFile" || {
+        showError "Could not save data/baseline.txt."
+        return
+    }
+
+    fileCount="$(wc -l < "$baselineFile")"
+    showMessage "Baseline created. Files saved: $fileCount"
 }
 
 checkForChanges() {
-    showNotice "Change auditing is not implemented yet."
-}
+    if [[ ! -f "$baselineFile" ]]; then
+        showError "No baseline yet. Choose Create baseline first."
+        return
+    fi
 
-viewLog() {
-    yad --text-info \
-        --title="Activity log" \
-        --filename="$logFile" \
-        --width=620 \
-        --height=400 \
-        --center \
-        --gtkrc="$styleFile" \
-        --button="Close:0"
+    if ! scanDemo > "$currentFile"; then
+        showError "Could not read the files in demo/."
+        return
+    fi
+
+    if diff -q "$baselineFile" "$currentFile" > /dev/null; then
+        showMessage "No changes found in demo/."
+    else
+        printf 'Someone changed/Tampered in this file\n'
+        printf 'Someone changed/Tampered in this file\n\n' > "$reportFile"
+        diff -u "$baselineFile" "$currentFile" >> "$reportFile"
+        showMessage "Someone changed/Tampered in this file"
+    fi
 }
 
 showMenu() {
+    local selectedAction
+    local menuExitCode
+
     while true; do
-        selectedAction="$(yad --list \
-            --title="File Integrity Monitor" \
-            --text="Choose an action for the monitored sample files." \
-            --column="Action" \
-            --no-headers \
-            --width=460 \
-            --height=270 \
-            --center \
-            --gtkrc="$styleFile" \
-            --button="Select:0" \
-            --button="Quit:1" \
-            "Reset demo files" \
-            "Create baseline" \
-            "Check for changes" \
-            "View log" \
-            "Quit")"
+        selectedAction="$(yad --list --title="Tamper Detector" \
+            --text="Save a baseline, then check demo/ for changes." \
+            --column="Action" --no-headers --width=420 --height=220 --center \
+            --button="Select:0" --button="Quit:1" \
+            "Create baseline" "Check for changes" "Quit")"
         menuExitCode=$?
 
-        if [[ "$menuExitCode" -eq 1 || "$menuExitCode" -eq 252 ]]; then
-            logMessage "Quit"
-            break
-        fi
-
-        if [[ "$menuExitCode" -ne 0 ]]; then
-            printf 'YAD stopped with exit code %s.\n' "$menuExitCode" >&2
+        if [[ "$menuExitCode" -ne 0 || "$selectedAction" == "Quit" ]]; then
             break
         fi
 
         case "$selectedAction" in
-            "Reset demo files")
-                logMessage "Reset demo files"
-                if resetDemo; then
-                    showNotice "Sample files restored."
-                else
-                    showNotice "The demo folder could not be reset."
-                fi
-                ;;
-            "Create baseline")
-                logMessage "Create baseline"
-                createBaseline
-                ;;
-            "Check for changes")
-                logMessage "Check for changes"
-                checkForChanges
-                ;;
-            "View log")
-                logMessage "View log"
-                viewLog
-                ;;
-            "Quit")
-                logMessage "Quit"
-                break
-                ;;
+            "Create baseline") createBaseline ;;
+            "Check for changes") checkForChanges ;;
         esac
     done
 }
-
-if ! command -v yad >/dev/null 2>&1; then
-    printf 'Please install YAD' >&2
-    exit 1
-fi
 
 showMenu
