@@ -1,11 +1,11 @@
-Someone changed/Tampered in this file
+Someone tampered with files in demo/.
 
---- /home/jezar-chris-ignacio/tamper-detector/data/baseline.txt	2026-11-22 16:36:08.403600231 +0800
-+++ /home/jezar-chris-ignacio/tamper-detector/data/current.txt	2026-11-22 16:41:54.818610803 +0800
+--- Baseline
++++ Current
 @@ -1,5 +1,5 @@
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./empty.txt
--0be2b6b6a7bc438350e4440cd855c0538ab7b864f8988aa6c1f3007e67d1d263  ./grades.txt
-+974e15ae88a00e08222fda94a34fed4b6eb5adf253f73ead655e2c0916c2949a  ./grades.txt
- d1cc43794ef5dfc6da40a44541210b0732a004bac57b4a73383714385d5e7c4b  ./meeting notes.txt
- ba863aebfc52c029fe3f38811ad7e3cdc08b30a1886718f8095c99fd5679acff  ./new test.txt
- 7d6288563914a70c2c93d4aaeed96cb8735bb9dfc8c19eaabc5a0d9d7db40b2a  ./notes/details.txt
+-d1d6d5427fe59ca0c966b0d7151339d60703b179db017f1b6aba8aafc0694ab7  ./grades.txt
++9451eb9fd24058475b671f62387eeabcf5cd6a2d2bacc8253146b04850b8eaa7  ./grades.txt
+ 9fe4e86ca300ffc156a14609c0f0abf4719ff53ef86177cd4f096a8d26ab46d9  ./meeting notes.txt
+ eb035b87af94a19e9fc4b9c7494174151fca1685773b74ca1be60003c04cd352  ./new test.txt
+ 7de7de044aad3917a73f2415c16d07b362fd16182575c557ccd290059ecfa4d5  ./notes/details.txt

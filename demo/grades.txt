@@ -1,5 +1,5 @@
 Alice,40
-Bob,45
+Bob,41
 Changed for the test
 
 Tampered during the demonstration.

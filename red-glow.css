@@ -2,13 +2,54 @@
 window,
 dialog {
     background-color: #160309;
-    color: #ffe8ec;
-    border: 1px solid #ff1744;
-    box-shadow: 0 0 14px #ff1744, 0 0 28px #a60025;
+    color: #fff1f3;
+    border: 2px solid #ff1744;
+    box-shadow: 0 0 12px #ff1744, 0 0 26px #ff1744, 0 0 42px #a60025;
+    border-radius: 8px;
+}
+
+decoration {
+    background-color: #160309;
+    border: 2px solid #ff1744;
+    border-radius: 8px;
+    box-shadow: 0 0 12px #ff1744, 0 0 26px #ff1744, 0 0 42px #a60025;
 }
 
 label {
-    color: #ffe8ec;
+    color: #fff1f3;
+    font-size: 14pt;
+}
+
+titlebar,
+headerbar {
+    background-image: none;
+    background-color: #330712;
+    color: #fff1f3;
+    border: 1px solid #ff1744;
+    box-shadow: 0 0 10px #ff1744;
+    border-radius: 8px 8px 0 0;
+}
+
+window titlebar label,
+window headerbar label,
+titlebar label,
+headerbar label,
+.titlebar .title,
+.headerbar .title {
+    color: #fff1f3;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+titlebar button,
+headerbar button,
+button.titlebutton {
+    background-image: none;
+    background-color: #470817;
+    color: #fff1f3;
+    border: 1px solid #ff244d;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ff1744;
 }
 
 button {
@@ -17,25 +58,30 @@ button {
     color: #fff1f3;
     border: 1px solid #ff244d;
     border-radius: 20px;
-    padding: 7px 14px;
-    box-shadow: 0 0 7px #ff1744;
+    min-height: 36px;
+    padding: 8px 16px;
+    font-size: 12pt;
+    box-shadow: 0 0 5px #ff1744;
 }
 
 button:hover {
     background-image: none;
     background-color: #a90d2e;
     color: #ffffff;
-    box-shadow: 0 0 12px #ff1744, 0 0 20px #a60025;
+    box-shadow: 0 0 10px #ff1744, 0 0 20px #a60025;
 }
 
 treeview,
-treeview.view {
+treeview.view,
+textview,
+textview text {
     background-color: #21070f;
-    color: #ffe8ec;
+    color: #fff1f3;
+    font-size: 13pt;
 }
 
 treeview:selected,
 treeview.view:selected {
     background-color: #a40d31;
-    color: #ffffff;
+    color: #000000;
 }
