@@ -32,6 +32,7 @@ fi
 showMessage() {
     local popupText
     printf -v popupText '<big><b>Tamper Detector</b></big>\n\n%s' "$1"
+    # YAD 0.40
     yad --info --gtkrc="$styleFile" --title="Tamper Detector" --undecorated --center --on-top \
         --width="$popupWidth" --height="$popupHeight" --text="$popupText"
 }
@@ -39,6 +40,7 @@ showMessage() {
 showError() {
     local popupText
     printf -v popupText '<big><b>Tamper Detector</b></big>\n\n%s' "$1"
+    # YAD 0.40
     yad --error --gtkrc="$styleFile" --title="Tamper Detector" --undecorated --center --on-top \
         --width="$popupWidth" --height="$popupHeight" --text="$popupText"
 }
@@ -49,6 +51,7 @@ showChangesReport() {
         return
     fi
 
+    # YAD 0.40
     yad --text-info --gtkrc="$styleFile" --title="Tamper detected" --undecorated --center --on-top --width=900 --height=600 \
         --filename="$reportFile" --button="Close:0"
 }
@@ -76,6 +79,7 @@ createBaseline() {
 
     if [[ -f "$baselineFile" ]]; then
         printf -v replacePrompt '<big><b>Replace baseline?</b></big>\n\nReplace the old baseline with the current demo/ files?'
+        # YAD 0.40
         yad --question --gtkrc="$styleFile" --title="Replace baseline?" --center \
             --undecorated --width="$popupWidth" --height="$popupHeight" \
             --text="$replacePrompt" \
@@ -138,6 +142,7 @@ showMenu() {
     printf -v menuText '<big><b>Tamper Detector</b></big>\n\nSave a baseline, check demo/ for changes, or open the latest report.'
 
     while true; do
+        # YAD 0.40
         yad --info --gtkrc="$styleFile" --title="Tamper Detector" --undecorated --center --on-top \
             --width="$popupWidth" --height="$popupHeight" \
             --text="$menuText" \
